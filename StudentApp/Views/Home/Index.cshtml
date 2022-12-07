@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Student>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="fs-3 fw-light">Add Your Students</h1>
+        <a asp-action="Create">Create</a> |
+        <a href=""  data-toggle="modal"  class= "text-success" data-target="#sortModal">Sort</a> |
+        <a class="text-danger" asp-action="DeleteAll" onclick="return confirm('Are you sure you want to delete all students in the system?')">Clear All</a>
+    </div>
+
+    <div class="card-body">
+        <form asp-action="Search">
+            <input class="form-input" name="searchTerm" placeholder="Search by Name" type="text" />         
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>            
+        <hr />
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-secondary">
+                You have no Students added in the system
+            </div>
+        } else
+        {
+           
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Grade</th>
+                        <th scope="col">Sub1</th>
+                        <th scope="col">Sub2</th>
+                         <th scope="col">Sub1Marks</th>
+                        <th scope="col">Sub2Marks</th>
+                        <th scope="col">AverageMarks</th>
+                        <th scope="col">ReportLetter</th>
+                        <th scope="col">Date Created</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>                                        
+                    @foreach (var item in Model)
+                    {
+                        <tr>                  
+                       
+                            
+                            <td>@item.Name</td>                            
+                            <td>&nbsp;&nbsp;&nbsp;@item.Grade</td>
+                                                         
+              
+                               <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.English</td>
+                               <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.Maths</td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.TotalMarks</td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.MarkByLetter</td>
+                            <td>&nbsp;&nbsp;@item.CreatedAt.ToString("dd/ MM/ yyyy")  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a asp-action="Edit" asp-route-id="@item.Id" class="">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" onclick="return confirm('Are you sure you want delete this student?')">Delete</a>
+                        </td>
+
+                          
+                        </tr>
+
+
+                       
+                    }     
+                
+              </tbody>
+            </table>
+     
+              <!-- Sort Modal -->         
+
+            <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form asp-action="Sort">
+                        <div>
+                            <label class="control-label mb-1 text-secondary">Sort By</label>
+                            <select name="sortBy" class="custom-select mb-3">
+                                <option>CreatedAt</option>
+                                <option>TotalMarks</option>
+                                <option>Sub1Marks</option>
+                                <option>Sub2Marks</option>
+                                <option>Grade</option>
+                            </select>
+                        </div>                       
+
+                        <div>
+                            <label class="control-label mb-1 text-secondary">Order By</label>
+                            <select name="orderBy" class="custom-select mb-3">
+                                <option>Asc</option>
+                                <option>Desc</option>
+                            </select>
+                        </div>                       
+                        <button type="submit" class="btn btn-primary">Sort</button>
+                    </form>
+                  </div>                 
+                </div>
+              </div>
+            </div>
+
+            }
+    </div>
+</div>
