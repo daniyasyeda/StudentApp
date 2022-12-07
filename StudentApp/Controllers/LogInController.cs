@@ -7,28 +7,28 @@ namespace StudentApp.Controllers
     public class LogInController : Controller
     {
         private readonly ILogger<LogInController> _logger;
-        private readonly IRepository<LogIn> _loginStore;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public LogInController(ILogger<LogInController> logger, IRepository<LogIn> loginStore)
+        public LogInController(ILogger<LogInController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            _loginStore = loginStore;
+            _unitOfWork = unitOfWork;
 
         }
         public IActionResult Index()
         {
-            return View();
+            return View(_unitOfWork.Logins.GetAll());
         }
         public LogIn UniqueCodeCal(LogIn item)
         {
             if (item.UniqueCode == "C3B2A1")
             {
-                _loginStore.Add(item);
+                _unitOfWork.Logins.Add(item);
             }
            else if (item.UniqueCode == "1A2B3C")
             {
-                _loginStore.Add(item);
+                _unitOfWork.Logins.Add(item);
             }
             else
             {
@@ -58,14 +58,14 @@ namespace StudentApp.Controllers
 
 
             };
-            _loginStore.Add(item);
+            _unitOfWork.Logins.Add(item);
 
-            return RedirectToAction("Index", "LogIn");
+            return RedirectToAction("Index","Login");
         }
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var item = _loginStore.Get(id);
+            var item = _unitOfWork.Logins.Get(id);
 
             if (item == null)
             {
@@ -73,36 +73,36 @@ namespace StudentApp.Controllers
                 return View("NotFound");
             }
 
-            _loginStore.Delete(item);
+            _unitOfWork.Logins.Delete(item);
 
             return RedirectToAction("Index", "LogIn");
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var item = _loginStore.Get(id);
+            var item = _unitOfWork.Logins.Get(id);
 
             if (item == null)
             {
                 ViewBag.ErrorMessage = $"An item with the id {id} was not found";
                 return View("NotFound");
             }
-            ViewBag.Students = _loginStore.GetAll();
+            ViewBag.Students = _unitOfWork.Logins.GetAll();
 
             return View(item);
         }
         [HttpPost]
         public IActionResult Edit(LogIn model)
         {
-            _loginStore.Edit(model);
+            _unitOfWork.Logins.Edit(model);
 
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult DeleteRange()
         {
-            var items = _loginStore.GetAll();
-            _loginStore.DeleteRange(items);
+            var items = _unitOfWork.Logins.GetAll();
+            _unitOfWork.Logins.DeleteRange(items);
 
             return RedirectToAction("Index");
         }
