@@ -1,5 +1,7 @@
-﻿@model IEnumerable<LogIn>
-<h1 class="fs-2 fw-light">Your Accounts</h1><a class="text-success" asp-action="DeleteRange" onclick="return confirm('Are you sure you want to delete all students in the system?')">Clear All Accounts</a>
+﻿@model IEnumerable<Student>
+<h4>Student</h4>
+<a class="text-success" asp-action="Create">Create</a>
+<hr />
 @if (Model != null)
 {
     @foreach (var item in Model)
@@ -12,7 +14,7 @@
                         <a class="text-danger" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want to delete '@item.Name's' account ?')">Delete</a>
                     </div>
                     <div class="d-flex align-items-start">
-                        <p class="mb-0">@item.Name - <small>@item.CreatedDate</small></p>
+                        <p class="mb-0">@item.Name - <small>@item.CreatedAt</small></p>                        
                     </div>
                     <div>
                     </div>
@@ -20,6 +22,11 @@
                 </div>
             </div>
         </div>
-    }
+    }        
 }
-<a class="text-success" asp-action="Create">Register</a>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -11,11 +11,12 @@ namespace StudentApp.Repositories
             private readonly ApplicationDbContext _db;
 
             public LoginRepository(ApplicationDbContext db)
-            {
+        {
                 _db = db;
             }
             public void Add(LogIn item)
             {
+            
                 _db.Logins.Add(item);
                 _db.SaveChanges();
             }

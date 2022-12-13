@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using StudentApp.Repositories;
 using System.Diagnostics;
 
+
 namespace StudentApp.Repositories
 {
     public class StudentRepository : IRepository<Student>
     {
         private readonly ApplicationDbContext _db;
 
-        public StudentRepository(ApplicationDbContext db)
+        public StudentRepository(ApplicationDbContext db) 
         {
             _db = db;
         }
@@ -50,6 +51,8 @@ namespace StudentApp.Repositories
 
             return model;
         }
+
+
         public Student ReportLetterCal(Student model)
         {
             if (model.TotalMarks >= 90)
@@ -80,6 +83,7 @@ namespace StudentApp.Repositories
         {
             TotalMarkCalculation(item);
             ReportLetterCal(item);
+  
             var originalItem = Get(item.Id);
             originalItem.Grade = item.Grade;
             originalItem.Name = item.Name;

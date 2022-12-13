@@ -4,11 +4,11 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace StudentApp.Repositories
 {
 
-    public class SubjectRepository : IRepository<Subjects>
+    public class SubjectRepository :  IRepository<Subjects>
     {
         private readonly ApplicationDbContext _db;
 
-        public SubjectRepository(ApplicationDbContext db)
+        public SubjectRepository(ApplicationDbContext db) 
         {
             _db = db;
         }

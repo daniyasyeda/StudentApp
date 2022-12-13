@@ -12,7 +12,7 @@ using StudentApp.Contexts;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221207104536_init")]
+    [Migration("20221212100900_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

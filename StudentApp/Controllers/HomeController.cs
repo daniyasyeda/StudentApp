@@ -1,221 +1,149 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudentApp.Models;
 using StudentApp.Repositories;
-using System.Diagnostics;
 
 namespace StudentApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<LogIn> LoginRepository;
 
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IRepository<LogIn> loginRepository)
         {
             _logger = logger;
-            _unitOfWork = unitOfWork;
+            LoginRepository = loginRepository;
 
         }
-
-        public Student TotalMarkCalculation(Student model)
-        {
-            model.TotalMarks = (model.English + model.Maths) / 2 ; 
-            
-            return model;
-        }
-        public Student ReportLetterCal(Student model)
-        {
-          if (model.TotalMarks >= 90)
-            {
-                model.MarkByLetter = "A (Outstanding)";
-            }
-            else if (model.TotalMarks >= 80)
-            {
-                model.MarkByLetter = "B (Good)";
-            }
-            else if (model.TotalMarks >= 70)
-            {
-                model.MarkByLetter = "C (Satisfactory)";
-            }
-            else if (model.TotalMarks >= 50)
-            {
-                model.MarkByLetter = "D (Limited)";
-            }
-            else if (model.TotalMarks <= 49)
-            {
-                model.MarkByLetter = "E (Not Passed)";
-            }
-       
-            return model;
-        }
-        public Student ReportLetter(Student model)
-        {
-            if (model.OutOf == 10)
-            {
-                model.TotalMarks = model.TotalMarks * 10;
-            }
-           else if (model.OutOf == 20)
-            {
-                model.TotalMarks = model.TotalMarks * 5;
-            }
-            else if (model.OutOf == 25)
-            {
-                model.TotalMarks = model.TotalMarks * 4;
-            }
-            else if (model.OutOf == 50)
-            {
-                model.TotalMarks = model.TotalMarks * 2;
-            }
-            else if (model.OutOf == 100)
-            {
-                model.TotalMarks = model.TotalMarks * 5;
-            }
-            return model;
-        }
-
-
         public IActionResult Index()
         {
-            return View(_unitOfWork.Students.GetAll());
+            return View(LoginRepository.GetAll());
         }
-        public IActionResult Search(string searchTerm)
+        public IActionResult Display()
         {
-            var items = _unitOfWork.Students.GetAll();
-
-            if (searchTerm == null)
-            {
-                return View("Index", items);
-            }
-
-            var lowerCaseSearchTerm = searchTerm.ToLower();
-
-            var filteredItems = items.Where(x =>
-                x.Name.ToLower().Contains(lowerCaseSearchTerm)
-                || x.Name.ToLower().Contains(lowerCaseSearchTerm));
-
-            return View("Index", filteredItems);
+            var a = LoginRepository.GetAll();
+            return View(LoginRepository.GetAll());
         }
+        public LogIn UniqueCodeCal(LogIn item)
+        {
+            if (item.UniqueCode == "C3B2A1")
+            {
+                LoginRepository.Add(item);
+            }
+           else if (item.UniqueCode == "1A2B3C")
+            {
+                LoginRepository.Add(item);
+            }
+            else
+            {
+                item.UniqueCode = "Error";
+                
+            }
+            return item;
+        }
+        public bool NameComparison(LogIn model)
+        {
+            var Allstudents = LoginRepository.GetAll();
+            bool studentexists = false;
 
+            foreach (LogIn student in Allstudents)
+            {
+                if (student.Name == model.Name)
+                {
+                    studentexists = true;
+                    break;
+                }
+
+            }
+            return studentexists;
+        }
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-        public IActionResult Sort(string sortBy, string orderBy)
-        {
-            var items = _unitOfWork.Students.GetAll();
-
-            if (sortBy == "CreatedAt")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.CreatedAt) : items.OrderByDescending(x => x.CreatedAt);
-
-            }
-            else if (sortBy == "TotalMarks")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.TotalMarks) : items.OrderByDescending(x => x.TotalMarks);
-
-            }
-            else if (sortBy == "English")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.English) : items.OrderByDescending(x => x.English);
-
-            }
-            else if (sortBy == "Maths")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.Maths) : items.OrderByDescending(x => x.Maths);
-
-            }
-            else if (sortBy == "Grade")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.Grade) : items.OrderByDescending(x => x.Grade);
-
-            }
-
-            return View("Index", items);
-        }
         [HttpPost]
-        public IActionResult Create(Student model)
+        public IActionResult Create(LogIn model)
         {
-            TotalMarkCalculation(model);
-            ReportLetterCal(model);
-            ReportLetter(model);
-            
-            var item = new Student
+            var login=UniqueCodeCal(model);
+            if(login.UniqueCode!="Error")
+            { 
+            var StudentExists = NameComparison(model);
+                if (StudentExists)
+                {
+                    ViewBag.Message = "Please provide a name that hasn't been added into the system";
+                    ModelState.Clear();
+                    return View();
+                }
+                else
+                {
+
+                    var item = new LogIn
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+
+                        Password = model.Password,
+                        UniqueCode = model.UniqueCode,
+                        CreatedDate = DateTime.Now
+
+
+
+                    };
+                    LoginRepository.Add(item);
+                }
+                return RedirectToAction("Index", "Login");
+            }
+            else
             {
-                Id = model.Id,
-                Name = model.Name,
- 
-                English = model.English,
+                return View("UnsuccesfulLogin");
+            }
+         }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var item = LoginRepository.Get(id);
 
-                Maths = model.Maths,
-                Grade = model.Grade,
-                MarkByLetter = model.MarkByLetter,
-                TotalMarks= model.TotalMarks,
-                CreatedAt = DateTimeOffset.UtcNow
-                
-                
+            if (item == null)
+            {
+                ViewBag.ErrorMessage = $"An item with the id {id} was not found";
+                return View("NotFound");
+            }
 
-            };
-            _unitOfWork.Students.Add(item);
+            LoginRepository.Delete(item);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "LogIn");
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var item = _unitOfWork.Students.Get(id);
+            var item = LoginRepository.Get(id);
 
             if (item == null)
             {
                 ViewBag.ErrorMessage = $"An item with the id {id} was not found";
                 return View("NotFound");
             }
-            ViewBag.Students = _unitOfWork.Students.GetAll();
+            ViewBag.Students = LoginRepository.GetAll();
 
             return View(item);
         }
         [HttpPost]
-        public IActionResult Edit(Student model)
+        public IActionResult Edit(LogIn model)
         {
-            _unitOfWork.Students.Edit(model);
-
-            return RedirectToAction("Index", "Home");
-        }
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            var item = _unitOfWork.Students.Get(id);
-
-            if (item == null)
-            {
-                ViewBag.ErrorMessage = $"An item with the id {id} was not found";
-                return View("NotFound");
-            }
-
-            _unitOfWork.Students.Delete(item);
+            LoginRepository.Edit(model);
 
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult DeleteRange()
         {
-            var items = _unitOfWork.Students.GetAll();
-            _unitOfWork.Students.DeleteRange(items);
+            var items = LoginRepository.GetAll();
+            LoginRepository.DeleteRange(items);
 
             return RedirectToAction("Index");
         }
 
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
