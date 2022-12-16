@@ -143,13 +143,12 @@ namespace StudentApp.Controllers
             var StudentExists = NameComparison(model);
             if (StudentExists)
             {
-                ViewBag.Message = "This Username Has already been added, please enter another";
+                ViewBag.Message = "This Student Name Has already been added, please enter another";
                 ModelState.Clear();
                 return View();
             }
             else
             {
-
                 TotalMarkCalculation(model);
                 OutOf(model);
                 ReportLetterCal(model);
@@ -158,16 +157,13 @@ namespace StudentApp.Controllers
                 {
                     Id = model.Id,
                     Name = model.Name,
-
                     English = model.English,
-
+                    OutOf = model.OutOf,
                     Maths = model.Maths,
                     Grade = model.Grade,
                     MarkByLetter = model.MarkByLetter,
                     TotalMarks = model.TotalMarks,
                     CreatedAt = DateTimeOffset.UtcNow
-
-
 
                 };
                 StudentRepository.Add(item);
@@ -190,8 +186,13 @@ namespace StudentApp.Controllers
             return View(item);
         }
         [HttpPost]
-        public IActionResult Edit(Student model)
+        public IActionResult Edit(Student item)
         {
+            var model = StudentRepository.Get(item.Id);
+
+            TotalMarkCalculation(model);
+            OutOf(model);
+            ReportLetterCal(model);
             StudentRepository.Edit(model);
 
             return RedirectToAction("Index", "Student");

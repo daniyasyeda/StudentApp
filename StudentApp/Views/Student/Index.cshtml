@@ -3,14 +3,15 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+ 
 
 <div class="card">
     <div class="card-header">
-        <h1 class="fs-3 fw-light">Track your current tasks</h1>
+        <h1 class="fs-3 fw-light">Add Your Students</h1>
         <a asp-action="Create">Create</a> |
-        <a href="" class="text-secondary" data-toggle="modal" data-target="#sortModal">Sort</a> |
-        <a class="text-danger" asp-action="DeleteAll" onclick="return confirm('Are you sure you want to delete all tasks in the system?')">Clear All</a>
-    </div>  
+        <a  data-toggle="modal" asp-action="Sort"  class= "text-success" data-target="#sortModal">Sort</a> |
+        <a class="text-danger" asp-action="DeleteRange" onclick="return confirm('Are you sure you want to delete all students in the system?')">Clear All</a>
+    </div>
 
     <div class="card-body">
         <form asp-action="Search">
@@ -22,52 +23,61 @@
         @if (!Model.Any())
         {
             <div class="alert alert-secondary">
-                You have no students in the system
+                You have no Students added in the system
             </div>
         } else
         {
+           
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Grade</th>
-                        <th scope="col">EnglishMarks</th>
-                        <th scope="col">MathMarks</th>
-                        <th scope="col">TotalMarks</th>
-                        <th scope="col">MarksByLetter</th>
-                        <th scope="col">CreatedAt</th>
-                        <th scope="col"></th>
+                        <th scope="col">OutOf</th>
+                        <th scope="col">English</th>
+                        <th scope="col">Maths</th>
+                        <th scope="col">Percentage</th>
+                        <th scope="col">ReportLetter</th>
+                        <th scope="col">Date Created</th>
+                        
                     </tr>
                 </thead>
                 <tbody>                                        
                     @foreach (var item in Model)
                     {
-                        <tr>                                            
-                           
-                            <td class="d-flex align-items-center">@item.Name</td>                            
-                            <td>@item.Grade</td>
-                            <td>@item.English</td>  
-                            <td>@item.English</td>  
-                            <td>@item.Maths</td>  
-                            <td>@item.TotalMarks</td>  
-                            <td>@item.MarkByLetter</td>  
-                            <td>@item.CreatedAt</td>  
-                            <td>                                 
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-success">Edit</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" onclick="return confirm('Are you sure you want delete this task?')">Delete</a>                                                                                     
-                            </td>
+                        <tr>                  
+                       
+                            
+                            <td>@item.Name</td>                            
+                            <td>&nbsp;&nbsp;&nbsp;@item.Grade</td>
+                                                         
+              <td>&nbsp;&nbsp;&nbsp;@item.OutOf</td>
+                               <td>&nbsp;&nbsp;&nbsp;&nbsp;@item.English</td>
+                               <td>&nbsp;&nbsp;&nbsp;@item.Maths</td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.TotalMarks%</td>
+                            <td>&nbsp;&nbsp;&nbsp;@item.MarkByLetter</td>
+                            <td>&nbsp;&nbsp;@item.CreatedAt.ToString("dd/ MM/ yyyy")  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a asp-action="Edit" asp-route-id="@item.Id" class="">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" onclick="return confirm('Are you sure you want delete @item.Name ?')">Delete</a> | <a href="https://localhost:7294/StudentProfile/Index" class="text-success">View Student</a>
+                        </td>
+
+                          
                         </tr>
-                    }                                
+
+
+                       
+                    }     
+                
               </tbody>
             </table>
+     
+              <!-- Sort Modal -->         
 
-            <!-- Sort Modal -->
-            <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
+            <div class="modal fade" id="sortModal" asp-for="Sort" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Filter By</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -79,6 +89,9 @@
                             <select name="sortBy" class="custom-select mb-3">
                                 <option>CreatedAt</option>
                                 <option>TotalMarks</option>
+                                <option>English</option>
+                                <option>Maths</option>
+                                <option>Grade</option>
                             </select>
                         </div>                       
 
@@ -95,6 +108,7 @@
                 </div>
               </div>
             </div>
-        }
+
+            }
     </div>
 </div>

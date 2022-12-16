@@ -20,26 +20,54 @@ namespace StudentApp.Controllers
         {
             return View(LoginRepository.GetAll());
         }
-        public IActionResult Display()
+        [HttpGet]
+        public IActionResult Login()
         {
-            var a = LoginRepository.GetAll();
-            return View(LoginRepository.GetAll());
+            return View();
+
         }
-        public LogIn UniqueCodeCal(LogIn item)
+        [HttpPost]
+        public IActionResult Login(LogIn model)
         {
-            if (item.UniqueCode == "C3B2A1")
+            var Allstudents = LoginRepository.GetAll();
+            bool studentExists = false;
+            string StudentName = "";
+            foreach (LogIn student in Allstudents)
             {
-                LoginRepository.Add(item);
+                if (student.Name == model.Name)
+                {
+                    if (student.Password == model.Password)
+                    {
+                        studentExists = true;
+                        StudentName = student.Name;
+                        break;
+                    }
+                }            
             }
-           else if (item.UniqueCode == "1A2B3C")
-            {
-                LoginRepository.Add(item);
+
+            if(studentExists)
+            { 
+                ViewBag.Message = StudentName;
+                return View("Success");
             }
             else
             {
-                item.UniqueCode = "Error";
-                
+                ViewBag.Message = "Unauthorized login, please enter correct username/password";
+                return View("UnsuccesfulLogIn");
             }
+            
+
+        }
+
+  
+
+        public LogIn UniqueCodeCal(LogIn item)
+        {
+            if(! (item.UniqueCode == "C3B2A1" || item.UniqueCode == "1A2B3C" || item.UniqueCode == "A1B2C3"))
+            {
+                item.UniqueCode = "Error";
+            }           
+           
             return item;
         }
         public bool NameComparison(LogIn model)
@@ -56,8 +84,11 @@ namespace StudentApp.Controllers
                 }
 
             }
+            //RedirectToAction("Index");
             return studentexists;
         }
+       
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -67,9 +98,15 @@ namespace StudentApp.Controllers
         public IActionResult Create(LogIn model)
         {
             var login=UniqueCodeCal(model);
-            if(login.UniqueCode!="Error")
-            { 
-            var StudentExists = NameComparison(model);
+            if (login.UniqueCode == "Error")
+            {
+                ViewBag.Message = "Use Another Code, this one isn't right";
+                ModelState.Clear();
+                return View();
+            }
+            else
+            {
+                var StudentExists = NameComparison(model);
                 if (StudentExists)
                 {
                     ViewBag.Message = "Please provide a name that hasn't been added into the system";
@@ -78,7 +115,6 @@ namespace StudentApp.Controllers
                 }
                 else
                 {
-
                     var item = new LogIn
                     {
                         Id = model.Id,
@@ -88,17 +124,12 @@ namespace StudentApp.Controllers
                         UniqueCode = model.UniqueCode,
                         CreatedDate = DateTime.Now
 
-
-
                     };
                     LoginRepository.Add(item);
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index", "Login");
-            }
-            else
-            {
-                return View("UnsuccesfulLogin");
-            }
+            }           
+            
          }
         [HttpGet]
         public IActionResult Delete(int id)
@@ -113,7 +144,7 @@ namespace StudentApp.Controllers
 
             LoginRepository.Delete(item);
 
-            return RedirectToAction("Index", "LogIn");
+            return RedirectToAction("Index", "Home");
         }
         [HttpGet]
         public IActionResult Edit(int id)
@@ -125,7 +156,7 @@ namespace StudentApp.Controllers
                 ViewBag.ErrorMessage = $"An item with the id {id} was not found";
                 return View("NotFound");
             }
-            ViewBag.Students = LoginRepository.GetAll();
+            
 
             return View(item);
         }
