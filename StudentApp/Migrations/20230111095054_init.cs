@@ -16,6 +16,7 @@ namespace StudentApp.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Class = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UniqueCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -26,34 +27,31 @@ namespace StudentApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Profiles",
+                name: "RollCalls",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Class = table.Column<int>(type: "int", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EnrolmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Parent1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Parent2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Parent1PN = table.Column<int>(type: "int", nullable: false),
-                    Parent2PN = table.Column<int>(type: "int", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    IsHere = table.Column<bool>(type: "bit", nullable: true),
+                    PartialAttendance = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EarlyDepartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LateArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Profiles", x => x.Id);
+                    table.PrimaryKey("PK_RollCalls", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
+                name: "StudentGrades",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: false),
+                    Class = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OutOf = table.Column<int>(type: "int", nullable: false),
                     English = table.Column<int>(type: "int", nullable: false),
                     Maths = table.Column<int>(type: "int", nullable: false),
@@ -63,25 +61,28 @@ namespace StudentApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.PrimaryKey("PK_StudentGrades", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subjects",
+                name: "StudentProfiles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EnglishMarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MathMarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalEnglishMarks = table.Column<int>(type: "int", nullable: false),
-                    TotalMathMarks = table.Column<int>(type: "int", nullable: false),
-                    PassEnglishMarks = table.Column<int>(type: "int", nullable: false),
-                    PassMathMarks = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Class = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EnrolmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Parent1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Parent2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Parent1Phone = table.Column<double>(type: "float", nullable: true),
+                    Parent2Phone = table.Column<double>(type: "float", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subjects", x => x.Id);
+                    table.PrimaryKey("PK_StudentProfiles", x => x.Id);
                 });
         }
 
@@ -91,13 +92,13 @@ namespace StudentApp.Migrations
                 name: "Logins");
 
             migrationBuilder.DropTable(
-                name: "Profiles");
+                name: "RollCalls");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "StudentGrades");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "StudentProfiles");
         }
     }
 }

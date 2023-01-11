@@ -1,0 +1,29 @@
+﻿@model StudentApp.Models.RollCall
+<h1>Fill  In Partial Absence</h1>
+
+<h4>@ViewBag.Message</h4>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EarlyDepartTime">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label asp-for="PartialAttendance">Choose:</label>
+            <select asp-for="PartialAttendance">
+                <option value="LateArrival">LateArrival</option>
+                <option value="PartialAttendance">PartialAttendance</option>
+            </select>
+            <div class="form-floating">
+                <label asp-for="EarlyDepartTime" class="control-label>EarlyDepartTime</label>
+                <input asp-for="Time" class="form-control"  />
+                <span asp-validation-for="EarlyDepartTime" class="text-danger"></span>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="form-group">
+    <input type="submit" value="Done" class="btn btn-primary" />
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

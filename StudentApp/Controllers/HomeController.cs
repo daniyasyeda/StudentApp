@@ -20,8 +20,26 @@ namespace StudentApp.Controllers
         {
             return View(LoginRepository.GetAll());
         }
+
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
+        public IActionResult Done()
+        {
+            return View("Index");
+        }
+        public IActionResult ViewProfile()
+        {
+            return View(LoginRepository.GetAll());
+        }
         [HttpGet]
         public IActionResult Login()
+        {
+            return View();
+
+        }
+        public IActionResult Privacy()
         {
             return View();
 
@@ -52,7 +70,7 @@ namespace StudentApp.Controllers
             }
             else
             {
-                ViewBag.Message = "Unauthorized login, please enter correct username/password";
+                ViewBag.Message = "This Name doesn't exist, Please register it";
                 return View("UnsuccesfulLogIn");
             }
             
@@ -87,7 +105,25 @@ namespace StudentApp.Controllers
             //RedirectToAction("Index");
             return studentexists;
         }
-       
+        public bool ClassComparison(LogIn model)
+        {
+            var Allstudents = LoginRepository.GetAll();
+            bool studentexists = false;
+
+            foreach (LogIn student in Allstudents)
+            {
+                if (student.Class == model.Class)
+                {
+                    studentexists = true;
+                    break;
+                }
+
+            }
+            //RedirectToAction("Index");
+            return studentexists;
+        }
+
+
 
         [HttpGet]
         public IActionResult Create()
@@ -107,19 +143,29 @@ namespace StudentApp.Controllers
             else
             {
                 var StudentExists = NameComparison(model);
+                var StudentExist = ClassComparison(model);
                 if (StudentExists)
                 {
                     ViewBag.Message = "Please provide a name that hasn't been added into the system";
                     ModelState.Clear();
                     return View();
                 }
+
+
+                   else if (StudentExist)
+                    {
+                        ViewBag.Message = "A teacher has already taken this class";
+                        ModelState.Clear();
+                        return View();
+                    }
+
                 else
                 {
                     var item = new LogIn
                     {
                         Id = model.Id,
                         Name = model.Name,
-
+                        Class = model.Class,
                         Password = model.Password,
                         UniqueCode = model.UniqueCode,
                         CreatedDate = DateTime.Now

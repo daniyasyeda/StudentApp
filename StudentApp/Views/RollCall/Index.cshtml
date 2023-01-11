@@ -1,0 +1,113 @@
+﻿@model IEnumerable<RollCall>
+
+<div class="alert alert-success">
+    Today : @DateTime.Now.ToShortDateString()
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">IsHere</th>
+            <th scope="col">Partial Attendance</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @using (Html.BeginForm("Edit", "RollCall", FormMethod.Post))
+            {
+                <input class="form-control" data-val="true" name="CreatedDateTime" type="datetime" id="CreatedDateTime" style="display:none" value=@item.CreatedDate.ToString()>
+                <tr>
+                    <td><input type="text" name="Name" value="@item.Name" /></td>
+                    @if (@item.IsHere == true)
+                    {
+                        <td><input type="checkbox" name="IsHere" checked>Is Here</td>
+                    }
+                    else
+                    {
+                        <td><input type="checkbox" name="IsHere">Is Here</td>
+                    }
+                        <td>
+                            <select id="partialattendance" name=PartialAttendance>
+                            @if (@item.PartialAttendance == "EarlyDeparture")
+                            {                                
+                                <option selected>EarlyDeparture</option>
+                                <option>LateArrival</option>
+                                <option>None</option>                                                           
+                            }
+                            else if (@item.PartialAttendance == "LateArrival")
+                            {
+                                <option>EarlyDeparture</option>
+                                <option selected>LateArrival</option>
+                                <option>None</option>     
+                            }
+                            else
+                            {
+                            <option selected>None</option>                            
+                            <option>EarlyDeparture</option>
+                            <option>LateArrival</option>
+                            }
+                            
+                        </select>
+                    </td>
+                    @if (@item.PartialAttendance == "LateArrival")
+                    {
+                        <td>
+                            <input asp-for="@item.LateArrivalTime" class="form-control"  name="LateArrivalTime" id="LateArrivalTime"/>                            
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input class="form-control" data-val="true" name="LateArrivalTime" type="time" id="LateArrivalTime" style="display:none" value=@item.LateArrivalTime.ToString()>
+                        </td>
+                    }
+                    @if (@item.PartialAttendance == "EarlyDeparture")
+                    {
+                        <td>
+                            <input asp-for="@item.EarlyDepartTime" class="form-control"  name="EarlyDepartureTime" id="EarlyDepartureTime"/>                            
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        <input class="form-control" data-val="true" name="EarlyDepartureTime" type="time" id="EarlyDepartureTime" style="display:none" value=@item.EarlyDepartTime.ToString()>
+                        </td>
+                    }
+                    
+
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" onclick="return confirm('Are you sure you want delete @item.Name ?')">Delete</a> |
+                        <input type="submit" class="form-group" asp-route-id="@item.Id" asp-action="Edit" value="Save" class="text-success" />
+                    </td>
+                    <td></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@section scripts{
+     <script type="text/javascript">
+                          $(function() {
+                              $('#partialattendance').change(function() {
+                                  if ($('#partialattendance').val() == "LateArrival") {
+                                      $('#EarlyDepartureTime').hide();
+                                      $('#LateArrivalTime').show();
+                                  }
+                                  else if ($('#partialattendance').val() == "EarlyDeparture") {
+                                      $('#LateArrivalTime').hide();
+                                      $('#EarlyDepartureTime').show();
+                                  }
+                                  else {
+                                      $('#LateArrivalTime').hide();
+                                      $('#EarlyDepartureTime').hide();
+                                  }
+
+                              });
+                          });</script>
+}

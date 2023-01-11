@@ -8,44 +8,51 @@ using System.Diagnostics;
 
 namespace StudentApp.Repositories
 {
-    public class StudentRepository : IRepository<Student>
+    public class StudentGradeRepository : IRepository<StudentGrade>
     {
         private readonly ApplicationDbContext _db;
 
-        public StudentRepository(ApplicationDbContext db) 
+        public StudentGradeRepository(ApplicationDbContext db)
         {
             _db = db;
         }
-        public void Add(Student item)
+        public void Add(StudentGrade item)
         {
-            _db.Students.Add(item);
+            _db.StudentGrades.Add(item);
             _db.SaveChanges();
         }
 
-        public void Delete(Student item)
+        public void Delete(StudentGrade item)
         {
-            _db.Students.Remove(item);
-            _db.SaveChanges();
-        }       
-
-        public void DeleteRange(IEnumerable<Student> items)
-        {
-            _db.Students.RemoveRange(items);
+            _db.StudentGrades.Remove(item);
             _db.SaveChanges();
         }
 
-        public Student Get(int id)
+        public void DeleteRange(IEnumerable<StudentGrade> items)
         {
-            return _db.Students.Find(id);
-           
+            _db.StudentGrades.RemoveRange(items);
+            _db.SaveChanges();
         }
 
-        public IEnumerable<Student> GetAll()
+        public StudentGrade Get(int id)
+        {
+            return _db.StudentGrades.Find(id);
+
+        }
+
+        public StudentGrade Get(string name,string classname)
+        {
+            return _db.StudentGrades.Where(s=>s.Name==name && s.Class==classname).FirstOrDefault();
+
+        }
+
+        public IEnumerable<StudentGrade> GetAll()
         {
 
-            return _db.Students;
+            return _db.StudentGrades;
         }
-        public Student TotalMarkCalculation(Student model)
+
+        public StudentGrade TotalMarkCalculation(StudentGrade model)
         {
             model.TotalMarks = (model.English + model.Maths) / 2;
 
@@ -53,7 +60,7 @@ namespace StudentApp.Repositories
         }
 
 
-        public Student ReportLetterCal(Student model)
+        public StudentGrade ReportLetterCal(StudentGrade model)
         {
             if (model.TotalMarks >= 90)
             {
@@ -79,13 +86,13 @@ namespace StudentApp.Repositories
             return model;
         }
 
-        public void Edit(Student item)
+        public void Edit(StudentGrade item)
         {
             TotalMarkCalculation(item);
             ReportLetterCal(item);
-  
+
             var originalItem = Get(item.Id);
-            originalItem.Grade = item.Grade;
+            originalItem.Class = item.Class;
             originalItem.Name = item.Name;
             originalItem.TotalMarks = item.TotalMarks;
             originalItem.MarkByLetter = item.MarkByLetter;
@@ -93,5 +100,7 @@ namespace StudentApp.Repositories
             originalItem.Maths = item.Maths;
             _db.SaveChanges();
         }
+
     }
-}
+    }
+    

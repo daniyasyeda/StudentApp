@@ -2,7 +2,7 @@
 using StudentApp.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace StudentApp.Repositories
-{
+{    
 
     public class StudentProfileRepository : IRepository<StudentProfile>
     {
@@ -14,36 +14,33 @@ namespace StudentApp.Repositories
         }
         public void Add(StudentProfile item)
         {
-            _db.Profiles.Add(item);
+            _db.StudentProfiles.Add(item); 
             _db.SaveChanges();
         }
 
         public void Delete(StudentProfile item)
         {
-            _db.Profiles.Remove(item);
+            _db.StudentProfiles.Remove(item);
             _db.SaveChanges();
         }
 
         public void DeleteRange(IEnumerable<StudentProfile> items)
         {
-            _db.Profiles.RemoveRange(items);
+            _db.StudentProfiles.RemoveRange(items);
             _db.SaveChanges();
         }
 
         public StudentProfile Get(int id)
         {
-            return _db.Profiles.Find(id);
+            return _db.StudentProfiles.Find(id);
 
         }
 
         public IEnumerable<StudentProfile> GetAll()
         {
 
-            return _db.Profiles;
+            return _db.StudentProfiles;
         }
-
-
-
         public void Edit(StudentProfile item)
         {
             var originalItem = Get(item.Id);
@@ -53,13 +50,16 @@ namespace StudentApp.Repositories
             originalItem.EnrolmentDate = item.EnrolmentDate;
             originalItem.Parent1 = item.Parent1;
             originalItem.Parent2 = item.Parent2;
-            originalItem.Parent1PN = item.Parent1PN;
-            originalItem.Parent2PN = item.Parent2PN;
+            originalItem.Parent1Phone = item.Parent1Phone;
+            originalItem.Parent2Phone = item.Parent2Phone;
             originalItem.Address = item.Address;
 
-
-
             _db.SaveChanges();
+        }
+
+        public StudentProfile Get(string value1, string value2)
+        {
+            throw new NotImplementedException();
         }
     }
 }

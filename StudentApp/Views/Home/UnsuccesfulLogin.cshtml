@@ -1,7 +1,27 @@
-﻿
-<div class="alert alert-secondary">
-              Unsuccessful Registration
+﻿<div class="alert alert-secondary">
+               <h1>There Was an Error</h1>
             </div>
-            <div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<p>There was an Error or Crash in the Application</p>
+
+<p> This can be caused due to many reasons, though mainly beacause you did not log in properly: </p>
+    <ul>
+       <li>Login Issue</li> 
+       <li> Wrong Unnique code</li> 
+  
+       <li>Accessibility Declined</li> 
+       <li> Spamming or Hacking </li>
+       <li>The application crashed</li>
+       <li>The username doesn't exist </li>
+       
+
+    </ul>
+
+
+
+     
+         
+    
+
+       <input type="button" class="btn btn-danger" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Student") + "'");" />
+          <small>This Web page is created by Daniya Syeda</small>

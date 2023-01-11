@@ -12,11 +12,11 @@ namespace StudentApp.Contexts
         }
 
         public DbSet<LogIn> Logins { get; set; }
-        public DbSet<Student> Students { get; set; }
+        public DbSet<StudentGrade> StudentGrades { get; set; }
 
 
-        public DbSet<StudentProfile> Profiles { get; set; }
-        public DbSet<Subjects> Subjects { get; set; }
+        public DbSet<StudentProfile> StudentProfiles { get; set; }
+        public DbSet<RollCall> RollCalls { get; set; }
 
 
     }

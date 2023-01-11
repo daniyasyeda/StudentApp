@@ -2,12 +2,12 @@
 
 namespace StudentApp.Models
 {
-    public class Student
+    public class StudentGrade
     {
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Grade { get; set; }
+        public string Class { get; set; }
         public int OutOf { get; set; }
         public int English { get; set; }
         public int Maths { get; set; }

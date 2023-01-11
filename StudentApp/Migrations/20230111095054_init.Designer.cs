@@ -12,7 +12,7 @@ using StudentApp.Contexts;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221212100900_init")]
+    [Migration("20230111095054_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,10 @@ namespace StudentApp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -52,7 +56,7 @@ namespace StudentApp.Migrations
                     b.ToTable("Logins");
                 });
 
-            modelBuilder.Entity("StudentApp.Models.Student", b =>
+            modelBuilder.Entity("StudentApp.Models.RollCall", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,13 +64,46 @@ namespace StudentApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EarlyDepartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsHere")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LateArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartialAttendance")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RollCalls");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentGrade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("English")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Grade")
                         .HasColumnType("int");
 
                     b.Property<string>("MarkByLetter")
@@ -88,7 +125,7 @@ namespace StudentApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Students");
+                    b.ToTable("StudentGrades");
                 });
 
             modelBuilder.Entity("StudentApp.Models.StudentProfile", b =>
@@ -103,8 +140,9 @@ namespace StudentApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Class")
-                        .HasColumnType("int");
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
@@ -120,51 +158,18 @@ namespace StudentApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Parent1PN")
-                        .HasColumnType("int");
+                    b.Property<double?>("Parent1Phone")
+                        .HasColumnType("float");
 
                     b.Property<string>("Parent2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Parent2PN")
-                        .HasColumnType("int");
+                    b.Property<double?>("Parent2Phone")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles");
-                });
-
-            modelBuilder.Entity("StudentApp.Models.Subjects", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("EnglishMarks")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MathMarks")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PassEnglishMarks")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PassMathMarks")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalEnglishMarks")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalMathMarks")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Subjects");
+                    b.ToTable("StudentProfiles");
                 });
 #pragma warning restore 612, 618
         }

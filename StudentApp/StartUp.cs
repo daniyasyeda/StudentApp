@@ -40,10 +40,10 @@ namespace StudentApp
                 options.UseSqlServer(Configuration.GetConnectionString("localSqlServerConnection"));
                 //options.UseNpgsql(GetRemoteConnectionString());
             });
-            services.AddTransient<IRepository<Student>, StudentRepository>();
+            services.AddTransient<IRepository<StudentGrade>, StudentGradeRepository>();
             services.AddTransient<IRepository<StudentProfile>, StudentProfileRepository>();
             services.AddTransient<IRepository<LogIn>, LoginRepository>();
-            services.AddTransient<IRepository<Subjects>, SubjectRepository>();
+            services.AddTransient<IRepository<RollCall>, RollCallRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
 

@@ -1,4 +1,4 @@
-﻿@model StudentApp.Models.Student
+﻿@model StudentApp.Models.StudentGrade
 
 @{
     ViewData["Title"] = "Create";
@@ -12,29 +12,34 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-floating">
+                         <input asp-for="Name" class="form-control"  placeholder="Text"/>
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+       
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Grade" class="control-label"></label>
-                <input asp-for="Grade" class="form-control" />
-                <span asp-validation-for="Grade" class="text-danger"></span>
+            <div class="form-floating">
+                           <input asp-for="Class" class="form-control"  placeholder="Text"/>
+                <label asp-for="Class" class="control-label"></label>
+     
+                <span asp-validation-for="Class" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-floating">
+                                <input asp-for="OutOf" class="form-control" placeholder="Text" />
                 <label asp-for="OutOf" class="control-label"></label>
-                <input asp-for="OutOf" class="form-control" />
+
                 <span asp-validation-for="OutOf" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-floating">
+                                <input asp-for="English" class="form-control" placeholder="Text" />
                 <label asp-for="English" class="control-label"></label>
-                <input asp-for="English" class="form-control" />
+
                 <span asp-validation-for="English" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-floating">
+                               <input asp-for="Maths" class="form-control" placeholder="Text" />
                 <label asp-for="Maths" class="control-label"></label>
-                <input asp-for="Maths" class="form-control" />
+ 
                 <span asp-validation-for="Maths" class="text-danger"></span>
             </div>
             @*<div class="form-group">

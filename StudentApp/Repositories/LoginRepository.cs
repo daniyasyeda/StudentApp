@@ -46,9 +46,15 @@ namespace StudentApp.Repositories
         {
             var originalItem = Get(item.Id);
             originalItem.Password = item.Password;
+            originalItem.Class = item.Class;
             originalItem.Name = item.Name;
             originalItem.CreatedDate = item.CreatedDate;
             _db.SaveChanges();
+        }
+
+        public LogIn Get(string value1, string value2)
+        {
+            throw new NotImplementedException();
         }
     }
 }

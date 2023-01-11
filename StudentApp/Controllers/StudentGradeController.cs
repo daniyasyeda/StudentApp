@@ -5,30 +5,33 @@ using System.Diagnostics;
 
 namespace StudentApp.Controllers
 {
-    public class StudentController : Controller
+    public class StudentGradeController : Controller
     {
-        private readonly ILogger<StudentController> _logger;
-        private readonly IRepository<Student> StudentRepository;
+        private readonly ILogger<StudentGradeController> _logger;
+        private readonly IRepository<StudentGrade> StudentGradeRepository;
+        private readonly IRepository<StudentProfile> StudentProfileRepository;
+        private readonly IRepository<RollCall> RollCallRepository;
 
 
-        public StudentController(ILogger<StudentController> logger, IRepository<Student> studentRepository)
+        public StudentGradeController(ILogger<StudentGradeController> logger, IRepository<StudentGrade> studentRepository, IRepository<StudentProfile> studentProfileRepository, IRepository<RollCall> rollCallRepository)
         {
             _logger = logger;
-            StudentRepository = studentRepository;
-
+            StudentGradeRepository = studentRepository;
+            StudentProfileRepository = studentProfileRepository;
+            RollCallRepository = rollCallRepository;
         }
         public IActionResult Return()
         {
             return View("Index", "StudentProfile");
         }
 
-        public Student TotalMarkCalculation(Student model)
+        public StudentGrade TotalMarkCalculation(StudentGrade model)
         {
             model.TotalMarks = (model.English + model.Maths) / 2 ; 
             
             return model;
         }
-        public Student ReportLetterCal(Student model)
+        public StudentGrade ReportLetterCal(StudentGrade model)
         {
           if (model.TotalMarks >= 90)
             {
@@ -53,7 +56,7 @@ namespace StudentApp.Controllers
        
             return model;
         }
-        public Student OutOf(Student model)
+        public StudentGrade OutOf(StudentGrade model)
         {
         
             model.TotalMarks = Convert.ToInt32(model.TotalMarks*1.00 / model.OutOf * 1.00 * 100);            
@@ -63,12 +66,12 @@ namespace StudentApp.Controllers
 
         public IActionResult Index()
         {
-            var a = StudentRepository.GetAll();
-            return View(a);
+        
+            return View(StudentGradeRepository.GetAll());
         }   
         public IActionResult Search(string searchTerm)
         {
-            var items = StudentRepository.GetAll();
+            var items = StudentGradeRepository.GetAll();
 
             if (searchTerm == null)
             {
@@ -84,49 +87,14 @@ namespace StudentApp.Controllers
             return View("Index", filteredItems);
         }
 
-        [HttpGet]
-        public IActionResult Create()
+       
+    
+        public bool NameComparison(StudentGrade model)
         {
-            return View();
-        }
-        public IActionResult Sort(string sortBy, string orderBy)
-        {
-            var items = StudentRepository.GetAll();
-
-            if (sortBy == "CreatedAt")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.CreatedAt) : items.OrderByDescending(x => x.CreatedAt);
-
-            }
-            else if (sortBy == "TotalMarks")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.TotalMarks) : items.OrderByDescending(x => x.TotalMarks);
-
-            }
-            else if (sortBy == "English")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.English) : items.OrderByDescending(x => x.English);
-
-            }
-            else if (sortBy == "Maths")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.Maths) : items.OrderByDescending(x => x.Maths);
-
-            }
-            else if (sortBy == "Grade")
-            {
-                items = orderBy == "Asc" ? items.OrderBy(x => x.Grade) : items.OrderByDescending(x => x.Grade);
-
-            }
-
-            return View("Index", items);
-        }
-        public bool NameComparison(Student model)
-        {
-            var Allstudents = StudentRepository.GetAll();
+            var Allstudents = StudentGradeRepository.GetAll();
             bool studentexists = false;
 
-            foreach (Student student in Allstudents)
+            foreach (StudentGrade student in Allstudents)
             {
                 if (student.Name == model.Name)
                 {
@@ -137,8 +105,30 @@ namespace StudentApp.Controllers
             }
             return studentexists;
         }
+
+        [HttpGet]
+        public IActionResult Create(int id)
+        {
+            var studentProfile = StudentProfileRepository.Get(id);                       
+            
+            var studentgrade = StudentGradeRepository.Get(studentProfile.Name,studentProfile.Class);
+            if(studentgrade==null)
+            {
+                var newstudentgrade = new StudentGrade
+                {
+                    Name = studentProfile.Name,
+                    Class=studentProfile.Class
+                };
+                return View(newstudentgrade);
+            }
+            else
+            {
+                return View(studentgrade);
+            }
+            
+        }
         [HttpPost]
-        public IActionResult Create(Student model)
+        public IActionResult Create(StudentGrade model)
         {
             var StudentExists = NameComparison(model);
             if (StudentExists)
@@ -153,54 +143,53 @@ namespace StudentApp.Controllers
                 OutOf(model);
                 ReportLetterCal(model);
 
-                var item = new Student
-                {
-                    Id = model.Id,
+                var item = new StudentGrade
+                {                    
                     Name = model.Name,
                     English = model.English,
                     OutOf = model.OutOf,
                     Maths = model.Maths,
-                    Grade = model.Grade,
+                    Class = model.Class,
                     MarkByLetter = model.MarkByLetter,
                     TotalMarks = model.TotalMarks,
                     CreatedAt = DateTimeOffset.UtcNow
 
                 };
-                StudentRepository.Add(item);
-                return RedirectToAction("Index", "Student");
+                StudentGradeRepository.Add(item);
+                return RedirectToAction("Index");
             }
             
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var item = StudentRepository.Get(id);
+            var item = StudentGradeRepository.Get(id);
 
             if (item == null)
             {
                 ViewBag.ErrorMessage = $"An item with the id {id} was not found";
                 return View("NotFound");
             }
-            ViewBag.Students = StudentRepository.GetAll();
+            //ViewBag.Students = StudentRepository.GetAll();
 
             return View(item);
         }
         [HttpPost]
-        public IActionResult Edit(Student item)
+        public IActionResult Edit(StudentGrade item)
         {
-            var model = StudentRepository.Get(item.Id);
+            var model = StudentGradeRepository.Get(item.Id);
 
             TotalMarkCalculation(model);
             OutOf(model);
             ReportLetterCal(model);
-            StudentRepository.Edit(model);
+            StudentGradeRepository.Edit(model);
 
-            return RedirectToAction("Index", "Student");
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var item = StudentRepository.Get(id);
+            var item = StudentGradeRepository.Get(id);
 
             if (item == null)
             {
@@ -208,15 +197,15 @@ namespace StudentApp.Controllers
                 return View("NotFound");
             }
 
-            StudentRepository.Delete(item);
+            StudentGradeRepository.Delete(item);
 
-            return RedirectToAction("Index", "Student");
+            return RedirectToAction("Index");
         }
 
         public IActionResult DeleteRange()
         {
-            var items = StudentRepository.GetAll();
-            StudentRepository.DeleteRange(items);
+            var items = StudentGradeRepository.GetAll();
+            StudentGradeRepository.DeleteRange(items);
 
             return RedirectToAction("Index");
         }
