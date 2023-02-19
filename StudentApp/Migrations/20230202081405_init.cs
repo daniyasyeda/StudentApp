@@ -18,6 +18,7 @@ namespace StudentApp.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Class = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OriginalPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UniqueCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

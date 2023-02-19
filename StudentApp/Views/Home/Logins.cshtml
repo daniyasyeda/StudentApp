@@ -1,0 +1,29 @@
+﻿@model IEnumerable<LogIn>
+<h1 class="fs-2 fw-light">Your Accounts</h1>
+@if (Model != null)
+{
+     <form asp-action="Search">
+            <input class="form-input" name="searchTerm" placeholder="Search by Name" type="text" />
+            <button class="btn btn-primary" type="submit">Search</button><button class="btn btn-success" type="submit">Back</button>
+        </form>
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 col-sm-6 p-2">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="text-danger" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want delete @item.Name ?')">Delete</a>
+
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <p class="mb-0">@item.Name - <small>@item.CreatedDate</small></p>
+          
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<a class="text-success" asp-action="Create">Register</a>
+       

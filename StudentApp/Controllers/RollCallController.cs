@@ -100,7 +100,7 @@ namespace StudentApp.Controllers
 
             RollCallRepository.Delete(item);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Success", "Home");
         }
         [HttpGet]
         public IActionResult Edit(int id)

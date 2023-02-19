@@ -18,7 +18,13 @@ namespace StudentApp.Controllers
         }
         public IActionResult Index()
         {
+           return View();
+           
+        }
+        public IActionResult Logins()
+        {
             return View(LoginRepository.GetAll());
+
         }
 
         public IActionResult ContactUs()
@@ -39,11 +45,27 @@ namespace StudentApp.Controllers
             return View();
 
         }
+
+        public IActionResult ConstructLoad()
+        {
+            return View(); 
+
+        }
+        public IActionResult Success() 
+        {
+            return View();
+
+        }
+
         public IActionResult Privacy()
         {
             return View();
 
         }
+     
+
+
+
         [HttpPost]
         public IActionResult Login(LogIn model)
         {
@@ -77,11 +99,27 @@ namespace StudentApp.Controllers
 
         }
 
-  
+        public IActionResult Search(string searchTerm)
+        {
+            var items = LoginRepository.GetAll();
+
+            if (searchTerm == null)
+            {
+                return View("Index", items);
+            }
+
+            var lowerCaseSearchTerm = searchTerm.ToLower();
+
+            var filteredItems = items.Where(x =>
+                x.Name.ToLower().Contains(lowerCaseSearchTerm)
+                || x.Name.ToLower().Contains(lowerCaseSearchTerm));
+
+            return View("Index", filteredItems);
+        }
 
         public LogIn UniqueCodeCal(LogIn item)
         {
-            if(! (item.UniqueCode == "C3B2A1" || item.UniqueCode == "1A2B3C" || item.UniqueCode == "A1B2C3"))
+            if(! (item.UniqueCode == "C3B2A1" || item.UniqueCode == "1A2B3C" || item.UniqueCode == "A1B2C3" || item.UniqueCode == "3C2B1A"))
             {
                 item.UniqueCode = "Error";
             }           
@@ -190,12 +228,14 @@ namespace StudentApp.Controllers
 
             LoginRepository.Delete(item);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Logins", "Home");
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            
             var item = LoginRepository.Get(id);
+    
 
             if (item == null)
             {

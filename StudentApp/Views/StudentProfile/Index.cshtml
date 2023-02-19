@@ -1,8 +1,10 @@
-﻿@model IEnumerable<StudentProfile>
+﻿
+@model IEnumerable<StudentProfile>
 
 @{
     ViewData["Title"] = "Student Profile";
 }
+
 
 <div class="card">
     <div class="card-header">
@@ -15,7 +17,7 @@
     <div class="card-body">
         <form asp-action="Search">
             <input class="form-input" name="searchTerm" placeholder="Search by Name" type="text" />
-            <button class="btn btn-primary" type="submit">Search</button>
+            <button class="btn btn-primary" type="submit">Search</button><button class="btn btn-success" type="submit">Back</button>
         </form>
         <hr />
         @if (Model != null)
@@ -30,7 +32,7 @@
         {            
                     @foreach (var item in Model)
                     {
-            
+            <div class = "wrapper">
                         <div class="card border-success mb-3" style="max-width: 20rem;">
                               <h3 class="card-header">Name: @item.Name</h3>
   <div class="card-body">
@@ -40,6 +42,7 @@
   <div class="card-body">
     <p class="card-text">This Card contains Info about @item.Name</p>
   </div>
+
   <ul class="list-group list-group-flush">
     <li class="list-group-item"><strong>DateOfBirth:</strong> @item.DOB.ToString("dd/MM/yyyy")</li>
     <li class="list-group-item"><strong>EnrolementDate:</strong> @item.EnrolmentDate.ToString("dd/MM/yyyy")</li>
@@ -49,6 +52,7 @@
     <li class="list-group-item"><strong>Parent1Phone:</strong> @item.Parent2Phone</li>
     <li class="list-group-item"><strong>Address:</strong> @item.Address</li>
   </ul>
+ 
   <div class="card-body">
  <a asp-action="Edit" asp-route-id="@item.Id" class="">Edit</a> |
     <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" onclick="return confirm('Are you sure you want delete @item.Name ?')">Delete</a> |
@@ -59,7 +63,7 @@
     This Card is Checked
   </div>
   </div>
-  
+  </div>
 
                     }
 

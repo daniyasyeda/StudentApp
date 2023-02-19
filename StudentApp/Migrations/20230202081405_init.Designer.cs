@@ -12,7 +12,7 @@ using StudentApp.Contexts;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230111095054_init")]
+    [Migration("20230202081405_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace StudentApp.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalPassword")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")

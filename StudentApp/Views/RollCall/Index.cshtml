@@ -17,6 +17,7 @@
         </tr>
     </thead>
     <tbody>
+        @{int i=0;}
         @foreach (var item in Model)
         {
             @using (Html.BeginForm("Edit", "RollCall", FormMethod.Post))
@@ -33,6 +34,7 @@
                         <td><input type="checkbox" name="IsHere">Is Here</td>
                     }
                         <td>
+                            <div>@item.Name</div>
                             <select id="partialattendance" name=PartialAttendance>
                             @if (@item.PartialAttendance == "EarlyDeparture")
                             {                                
@@ -58,7 +60,9 @@
                     @if (@item.PartialAttendance == "LateArrival")
                     {
                         <td>
-                            <input asp-for="@item.LateArrivalTime" class="form-control"  name="LateArrivalTime" id="LateArrivalTime"/>                            
+                            <inpu
+                                
+                                t asp-for="@item.LateArrivalTime" class="form-control"  name="LateArrivalTime" id="LateArrivalTime"/>                            
                         </td>
                     }
                     else
@@ -83,31 +87,37 @@
 
                     <td>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" onclick="return confirm('Are you sure you want delete @item.Name ?')">Delete</a> |
-                        <input type="submit" class="form-group" asp-route-id="@item.Id" asp-action="Edit" value="Save" class="text-success" />
+                        <input type="submit" class="form-group" asp-route-id="@item.Id" asp-action="Edit" value="Save" onclick="return confirm('Saving this info will keep it permanent')" class="text-success" />
                     </td>
                     <td></td>
-                </tr>
+                </tr>                
             }
         }
     </tbody>
 </table>
 @section scripts{
      <script type="text/javascript">
-                          $(function() {
-                              $('#partialattendance').change(function() {
-                                  if ($('#partialattendance').val() == "LateArrival") {
-                                      $('#EarlyDepartureTime').hide();
-                                      $('#LateArrivalTime').show();
-                                  }
-                                  else if ($('#partialattendance').val() == "EarlyDeparture") {
-                                      $('#LateArrivalTime').hide();
-                                      $('#EarlyDepartureTime').show();
-                                  }
-                                  else {
-                                      $('#LateArrivalTime').hide();
-                                      $('#EarlyDepartureTime').hide();
-                                  }
 
-                              });
-                          });</script>
+            $(function() {                              
+                              //$('#partialattendance').change(function() {
+                              //    if ($('#partialattendance').val() == "LateArrival") {
+                              //        $('#EarlyDepartureTime').hide();
+                              //        $('#LateArrivalTime').show();
+                              //    }
+                              //    else if ($('#partialattendance').val() == "EarlyDeparture") {
+                              //        $('#LateArrivalTime').hide();
+                              //        $('#EarlyDepartureTime').show();
+                              //    }
+                              //    else {
+                              //        $('#LateArrivalTime').hide();
+                              //        $('#EarlyDepartureTime').hide();
+                              //    }
+
+                              //});
+                              const div = document.getElementsByTagName("select");
+
+                          });
+
+        
+                      </script>
 }

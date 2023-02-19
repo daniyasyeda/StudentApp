@@ -1,6 +1,19 @@
 ﻿@model StudentApp.Models.LogIn
+
 @if(ViewBag.Message!=null)
 {
-    <h1>Welcome @ViewBag.Message</h1>
+    
+   <marquee> <h1 style="color:#18364e">Welcome @ViewBag.Message</h1></marquee>
+ <h2>Get Your Organised Teaching Journey Started!</h2>
+ <ul>
+     <li><a asp-action="Index" class="text-success" asp-controller="StudentProfile">Add Your Student Details!</a></li>
+     <li><a asp-action="Index" class="text-success" asp-controller="StudentGrade">Take a look at student Reports and grades!</a></li>
+     
+     <li><a asp-action="ConstructLoad" class="text-success" asp-controller="RollCall">Mark Attendance Daily</a></li>
+     <li><a asp-action="ContactUs" class="text-success" asp-controller="Home">Contact Us For More Info</a></li>
+<li><a asp-action="Privacy" class="text-success" asp-controller="Home">See Our Web Rules</a></li>
+ </ul>
+
+    
 }
 

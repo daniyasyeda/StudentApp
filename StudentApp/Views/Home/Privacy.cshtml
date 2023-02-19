@@ -1,4 +1,5 @@
 ﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Privacy Policy";
 }
 
@@ -30,7 +31,7 @@ and input from you into the data input fields, we don't store any other info fro
 
      
          
-    
+     
 
-       <input type="button" class="btn btn-danger" value="Agree" onclick="@("window.location.href='" + @Url.Action("Index", "Home") + "'");" />
+       <input type="button" class="btn btn-danger" value="Agree" onclick="@("window.location.href='" + @Url.Action("Logins", "Home") + "'");" />
           <small>This Web page is created by Daniya Syeda</small>

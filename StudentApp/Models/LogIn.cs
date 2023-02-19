@@ -6,6 +6,8 @@
         public string Name { get; set; }
         public string Class { get; set; }
         public string Password { get; set; }
+        public string? OriginalPassword { get; set; }
+
         public string UniqueCode { get; set; }
         public DateTime CreatedDate { get; set; }
     }
