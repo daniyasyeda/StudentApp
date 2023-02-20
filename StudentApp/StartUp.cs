@@ -37,8 +37,8 @@ namespace StudentApp
             services.AddControllersWithViews();            
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("localSqlServerConnection"));
-                //options.UseNpgsql(GetRemoteConnectionString());
+                //options.UseSqlServer(Configuration.GetConnectionString("localSqlServerConnection"));
+                options.UseNpgsql(GetRemoteConnectionString());
             });
             services.AddTransient<IRepository<StudentGrade>, StudentGradeRepository>();
             services.AddTransient<IRepository<StudentProfile>, StudentProfileRepository>();
