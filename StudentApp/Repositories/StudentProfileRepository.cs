@@ -46,8 +46,8 @@ namespace StudentApp.Repositories
             var originalItem = Get(item.Id);
             originalItem.Class = item.Class;
             originalItem.Name = item.Name;
-            originalItem.DOB = item.DOB;
-            originalItem.EnrolmentDate = item.EnrolmentDate;
+            originalItem.DOB = item.DOB.ToUniversalTime();            
+            originalItem.EnrolmentDate = item.EnrolmentDate.ToUniversalTime();            
             originalItem.Parent1 = item.Parent1;
             originalItem.Parent2 = item.Parent2;
             originalItem.Parent1Phone = item.Parent1Phone;

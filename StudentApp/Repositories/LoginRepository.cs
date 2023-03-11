@@ -48,7 +48,7 @@ namespace StudentApp.Repositories
             originalItem.Password = item.Password;
          
             originalItem.Name = item.Name;
-            originalItem.CreatedDate = item.CreatedDate;
+            originalItem.CreatedDate = item.CreatedDate.ToUniversalTime();
             _db.SaveChanges();
         }
 

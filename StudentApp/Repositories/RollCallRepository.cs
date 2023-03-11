@@ -20,11 +20,11 @@ namespace StudentApp.Repositories
             {                
                 Name = model.Name,
                 IsHere = model.IsHere,
-                EarlyDepartTime= DateTime.Now,
-                LateArrivalTime= DateTime.Now,
+                EarlyDepartTime= DateTime.UtcNow,
+                LateArrivalTime= DateTime.UtcNow,
                 PartialAttendance= model.PartialAttendance,
-                //Time = TimeOnly.FromDateTime(DateTime.Now),
-                CreatedDate = DateTime.Now
+                //Time = TimeOnly.FromDateTime(DateTime.UtcNow),
+                CreatedDate = DateTime.UtcNow
 
             };
             _db.RollCalls.Add(item);
@@ -63,8 +63,8 @@ namespace StudentApp.Repositories
             originalItem.Name = item.Name;
             originalItem.IsHere = item.IsHere;
             originalItem.PartialAttendance = item.PartialAttendance;
-            originalItem.EarlyDepartTime = item.EarlyDepartTime;
-            originalItem.LateArrivalTime = item.LateArrivalTime;
+            originalItem.EarlyDepartTime = item.EarlyDepartTime.Value.ToUniversalTime();
+            originalItem.LateArrivalTime = item.LateArrivalTime.Value.ToUniversalTime();
             originalItem.CreatedDate = item.CreatedDate;
             _db.SaveChanges();
         }

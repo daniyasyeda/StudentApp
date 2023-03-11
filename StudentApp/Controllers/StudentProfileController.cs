@@ -122,15 +122,13 @@ namespace StudentApp.Controllers
             }
             else
             {
-                //Name,Class,DOB.EnrolmentDate,Parent1,Parent2, Parent1Phone, Parent2Phonny, Address
-
                 var item = new StudentProfile
                 {
                     Id = model.Id,
                     Name = model.Name,
                     Class = model.Class,
-                    DOB = model.DOB,
-                    EnrolmentDate = model.EnrolmentDate,
+                    DOB = model.DOB.ToUniversalTime(),                    
+                    EnrolmentDate = model.EnrolmentDate.ToUniversalTime(),
                     Parent1 = model.Parent1,
                     Parent2 = model.Parent2,
                     Parent1Phone = model.Parent1Phone,
@@ -143,7 +141,7 @@ namespace StudentApp.Controllers
                 var rollcall = new RollCall
                 {
                     Name =items.Name, 
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.UtcNow,
                     PartialAttendance="false"
 
                 };

@@ -206,7 +206,7 @@ namespace StudentApp.Controllers
                         Class = model.Class,
                         Password = model.Password,
                         UniqueCode = model.UniqueCode,
-                        CreatedDate = DateTime.Now
+                        CreatedDate = DateTime.UtcNow
 
                     };
                     LoginRepository.Add(item);

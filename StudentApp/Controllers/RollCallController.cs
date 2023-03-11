@@ -24,18 +24,21 @@ namespace StudentApp.Controllers
             bool ishere = false;
             ishere = model["IsHere"]=="on"?true:false;
             DateTime CreatedDate = new DateTime();
-            DateTime.TryParse(model["CreatedDateTime"], out CreatedDate);
+            DateTime.TryParse(model["CreatedDateTime"], out CreatedDate);            
             DateTime earlydeparttimeonly = new DateTime() ;
             DateTime.TryParse(model["EarlyDepartureTime"], out earlydeparttimeonly);
+            earlydeparttimeonly = earlydeparttimeonly.ToUniversalTime();
             DateTime latearrivaltimeonly = new DateTime();
-            DateTime.TryParse(model["LateArrivalTime"], out latearrivaltimeonly);            
+            DateTime.TryParse(model["LateArrivalTime"], out latearrivaltimeonly);          
+            latearrivaltimeonly = latearrivaltimeonly.ToUniversalTime();
             var item = new RollCall
             {
                 Id = id,
                 Name = model["Name"],
                 PartialAttendance = PA,
-                EarlyDepartTime = Convert.ToDateTime(CreatedDate.ToString("dd/MM/yyyy") + " " + earlydeparttimeonly.ToString("HH:mm:ss")),
-                LateArrivalTime = Convert.ToDateTime(CreatedDate.ToString("dd/MM/yyyy") + " " + latearrivaltimeonly.ToString("HH:mm:ss")),
+                EarlyDepartTime = Convert.ToDateTime(CreatedDate.ToString("dd/MM/yyyy") + " " + earlydeparttimeonly.ToString("HH:mm:ss")).ToUniversalTime(),
+                 
+                LateArrivalTime = Convert.ToDateTime(CreatedDate.ToString("dd/MM/yyyy") + " " + latearrivaltimeonly.ToString("HH:mm:ss")).ToUniversalTime(),
                 IsHere = ishere,
                 CreatedDate = CreatedDate
 
@@ -73,7 +76,7 @@ namespace StudentApp.Controllers
             //    {
             //        Name = model.Name,
 
-            //        CreatedDate = DateTime.Now
+            //        CreatedDate = DateTime.UtcNow
 
             //    };
             //    RollCallRepository.Add(items);
